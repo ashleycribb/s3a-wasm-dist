@@ -9,7 +9,7 @@
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/s3a-storage"
+    "url": "https://github.com/ashleycribb/s3a-storage"
   },
   "files": [
     "s3a_wasm_snapshot_bg.wasm",
