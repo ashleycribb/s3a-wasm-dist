@@ -1,4 +1,4 @@
-source: ashleycribb/s3a-storage@0d2dafcf2ea6690515e853839bd01d307027c9a6
-version: v0.1.1
-sha256(s3a_wasm_snapshot_bg.wasm): b5bbba396b67172887a1ce502ae52b9bb016bded6f149f1617c3c0f3bb1253c8
-built: 2026-10-20 wasm-pack 0.13.1 rustc 1.99.1
+source: ashleycribb/s3a-storage@9715e3cc22f4fa086f6d32d4c80f10422c78ca1e
+version: v0.1.2
+sha256(s3a_wasm_snapshot_bg.wasm): 75f617de0ab813b320a4a16c7dc2eda84e5ff200fbe1ad57584b810a1f160ee4
+built: 2026-10-20T11:48:40Z by wasm-dist run 39417432443
