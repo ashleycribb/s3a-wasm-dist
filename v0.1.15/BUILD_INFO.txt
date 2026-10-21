@@ -1,0 +1,4 @@
+source: ashleycribb/s3a-storage@b68f3d900a58b311864eb655b4735dd15c81461b
+version: v0.1.15
+sha256(s3a_wasm_snapshot_bg.wasm): 3b731195755588250b30192da91d9648e8f81e655b1aeffbaf8b33f0007d29d5
+built: 2026-10-21T18:44:19Z by wasm-dist run 39655314794
