@@ -39,6 +39,10 @@ export class WasmAgentSnapshot {
      */
     assert_agent_allows(agent_slug: string, verb_id?: number | null, tool_bit?: number | null): void;
     /**
+     * Returns "none" (never asked), "granted", or "withdrawn" (declined or withdrawn).
+     */
+    consent_state(): string;
+    /**
      * Exports the snapshot as an immutable .snapshot.s3a Uint8Array buffer.
      */
     export_bytes(): Uint8Array;
@@ -81,6 +85,10 @@ export class WasmAgentSnapshot {
      */
     record_human(verb_id: number, actor_hash: any, object_hash: number, ai_trace_index?: number | null): number;
     /**
+     * Engine truth for the UI recording indicator: true only if tracing is active.
+     */
+    recording_active(): boolean;
+    /**
      * Checks whether an agent requires human supervisory gate clearance.
      */
     requires_human_gate(agent_slug: string): boolean;
@@ -96,6 +104,12 @@ export class WasmAgentSnapshot {
      * Searches indexed claims by vector embedding using SIMD-accelerated cosine similarity.
      */
     search_claims_vector(query_embedding: Float32Array, top_k?: number | null, min_score?: number | null, include_hidden?: boolean | null): any;
+    /**
+     * Records consent (granted=true) or decline/withdrawal (granted=false) as a Tile-71
+     * `ConsentRecord`. Tracing is enabled only for a Research grant with a non-empty study_id.
+     * `purpose`: 1=Research, 2=Analytics, 3=ModelTraining, 4=Sharing.
+     */
+    set_consent(granted: boolean, purpose: number, study_id: string): boolean;
     /**
      * Resolves an xAPI IRI or label to its 32-bit integer verb_id.
      */
@@ -169,6 +183,7 @@ export interface InitOutput {
     readonly wasmagentsnapshot_add_paper: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly wasmagentsnapshot_apply_delta: (a: number, b: number, c: number) => [number, number, number];
     readonly wasmagentsnapshot_assert_agent_allows: (a: number, b: number, c: number, d: number, e: number) => [number, number];
+    readonly wasmagentsnapshot_consent_state: (a: number) => [number, number];
     readonly wasmagentsnapshot_export_bytes: (a: number) => [number, number, number, number];
     readonly wasmagentsnapshot_export_delta: (a: number) => [number, number, number, number];
     readonly wasmagentsnapshot_export_since: (a: number, b: bigint) => [number, number, number];
@@ -179,10 +194,12 @@ export interface InitOutput {
     readonly wasmagentsnapshot_preflight: (a: number, b: number, c: number, d: number, e: number) => [number, number];
     readonly wasmagentsnapshot_record_ai: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
     readonly wasmagentsnapshot_record_human: (a: number, b: number, c: any, d: number, e: number) => [number, number, number];
+    readonly wasmagentsnapshot_recording_active: (a: number) => number;
     readonly wasmagentsnapshot_requires_human_gate: (a: number, b: number, c: number) => [number, number, number];
     readonly wasmagentsnapshot_search_claims_hybrid: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
     readonly wasmagentsnapshot_search_claims_text: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
     readonly wasmagentsnapshot_search_claims_vector: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
+    readonly wasmagentsnapshot_set_consent: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
     readonly wasmagentsnapshot_verb_id_for_iri: (a: number, b: number, c: number) => number;
     readonly wasmsyncbatch_bytes: (a: number) => [number, number];
     readonly wasmsyncbatch_new_cursor: (a: number) => bigint;

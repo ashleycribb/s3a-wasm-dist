@@ -108,6 +108,22 @@ export class WasmAgentSnapshot {
         }
     }
     /**
+     * Returns "none" (never asked), "granted", or "withdrawn" (declined or withdrawn).
+     * @returns {string}
+     */
+    consent_state() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.wasmagentsnapshot_consent_state(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
      * Exports the snapshot as an immutable .snapshot.s3a Uint8Array buffer.
      * @returns {Uint8Array}
      */
@@ -249,6 +265,14 @@ export class WasmAgentSnapshot {
         return ret[0] >>> 0;
     }
     /**
+     * Engine truth for the UI recording indicator: true only if tracing is active.
+     * @returns {boolean}
+     */
+    recording_active() {
+        const ret = wasm.wasmagentsnapshot_recording_active(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
      * Checks whether an agent requires human supervisory gate clearance.
      * @param {string} agent_slug
      * @returns {boolean}
@@ -313,6 +337,24 @@ export class WasmAgentSnapshot {
             throw takeFromExternrefTable0(ret[1]);
         }
         return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Records consent (granted=true) or decline/withdrawal (granted=false) as a Tile-71
+     * `ConsentRecord`. Tracing is enabled only for a Research grant with a non-empty study_id.
+     * `purpose`: 1=Research, 2=Analytics, 3=ModelTraining, 4=Sharing.
+     * @param {boolean} granted
+     * @param {number} purpose
+     * @param {string} study_id
+     * @returns {boolean}
+     */
+    set_consent(granted, purpose, study_id) {
+        const ptr0 = passStringToWasm0(study_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.wasmagentsnapshot_set_consent(this.__wbg_ptr, granted, purpose, ptr0, len0);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return ret[0] !== 0;
     }
     /**
      * Resolves an xAPI IRI or label to its 32-bit integer verb_id.
