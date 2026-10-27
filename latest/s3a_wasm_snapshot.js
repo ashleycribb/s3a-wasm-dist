@@ -108,6 +108,50 @@ export class WasmAgentSnapshot {
         }
     }
     /**
+     * True if decision `index` was made by `reviewer_id` on `submission_id` with exactly `comment`.
+     * @param {number} index
+     * @param {string} reviewer_id
+     * @param {string} submission_id
+     * @param {string} comment
+     * @returns {boolean}
+     */
+    committee_decision_matches(index, reviewer_id, submission_id, comment) {
+        const ptr0 = passStringToWasm0(reviewer_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(submission_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(comment, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ret = wasm.wasmagentsnapshot_committee_decision_matches(this.__wbg_ptr, index, ptr0, len0, ptr1, len1, ptr2, len2);
+        return ret !== 0;
+    }
+    /**
+     * Bytes the reviewer must sign with Ed25519 for the *next* decision.
+     * verdict: 1=Approve, 2=Revise, 3=Reject. `timestamp_sec` must be passed unchanged
+     * to `record_committee_decision`.
+     * @param {number} verdict
+     * @param {string} reviewer_id
+     * @param {string} submission_id
+     * @param {string} comment
+     * @param {number} timestamp_sec
+     * @returns {Uint8Array}
+     */
+    committee_signing_payload(verdict, reviewer_id, submission_id, comment, timestamp_sec) {
+        const ptr0 = passStringToWasm0(reviewer_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(submission_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(comment, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ret = wasm.wasmagentsnapshot_committee_signing_payload(this.__wbg_ptr, verdict, ptr0, len0, ptr1, len1, ptr2, len2, timestamp_sec);
+        if (ret[3]) {
+            throw takeFromExternrefTable0(ret[2]);
+        }
+        var v4 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
+        wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+        return v4;
+    }
+    /**
      * Returns "none" (never asked), "granted", or "withdrawn" (declined or withdrawn).
      * @returns {string}
      */
@@ -191,6 +235,22 @@ export class WasmAgentSnapshot {
         return v1;
     }
     /**
+     * Read-only JSON list of committee decisions (hashes, verdict, timestamp, chain status).
+     * @returns {string}
+     */
+    list_committee_decisions() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.wasmagentsnapshot_list_committee_decisions(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
      * Creates a new session from a 128-bit hex UUID and seeds the registry with default agents.
      * @param {string} session_uuid_hex
      * @returns {WasmAgentSnapshot}
@@ -244,6 +304,36 @@ export class WasmAgentSnapshot {
         const ptr0 = passStringToWasm0(agent_slug, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
         const ret = wasm.wasmagentsnapshot_record_ai(this.__wbg_ptr, ptr0, len0, step_type, confidence, isLikeNone(human_index) ? Number.MAX_SAFE_INTEGER : (human_index) >>> 0);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return ret[0] >>> 0;
+    }
+    /**
+     * Verifies and appends a reviewer-signed decision. Returns its index.
+     * Errors (never silent) on bad verdict, empty reviewer/submission, oversize comment,
+     * malformed key/signature, or a signature that does not verify.
+     * @param {number} verdict
+     * @param {string} reviewer_id
+     * @param {string} submission_id
+     * @param {string} comment
+     * @param {number} timestamp_sec
+     * @param {Uint8Array} reviewer_public_key
+     * @param {Uint8Array} signature
+     * @returns {number}
+     */
+    record_committee_decision(verdict, reviewer_id, submission_id, comment, timestamp_sec, reviewer_public_key, signature) {
+        const ptr0 = passStringToWasm0(reviewer_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(submission_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(comment, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ptr3 = passArray8ToWasm0(reviewer_public_key, wasm.__wbindgen_malloc);
+        const len3 = WASM_VECTOR_LEN;
+        const ptr4 = passArray8ToWasm0(signature, wasm.__wbindgen_malloc);
+        const len4 = WASM_VECTOR_LEN;
+        const ret = wasm.wasmagentsnapshot_record_committee_decision(this.__wbg_ptr, verdict, ptr0, len0, ptr1, len1, ptr2, len2, timestamp_sec, ptr3, len3, ptr4, len4);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }
@@ -366,6 +456,19 @@ export class WasmAgentSnapshot {
         const len0 = WASM_VECTOR_LEN;
         const ret = wasm.wasmagentsnapshot_verb_id_for_iri(this.__wbg_ptr, ptr0, len0);
         return ret === Number.MAX_SAFE_INTEGER ? undefined : ret;
+    }
+    /**
+     * Verifies decision `index` against the reviewer public key held by the app.
+     * @param {number} index
+     * @param {Uint8Array} reviewer_public_key
+     */
+    verify_committee_decision(index, reviewer_public_key) {
+        const ptr0 = passArray8ToWasm0(reviewer_public_key, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.wasmagentsnapshot_verify_committee_decision(this.__wbg_ptr, index, ptr0, len0);
+        if (ret[1]) {
+            throw takeFromExternrefTable0(ret[0]);
+        }
     }
 }
 if (Symbol.dispose) WasmAgentSnapshot.prototype[Symbol.dispose] = WasmAgentSnapshot.prototype.free;

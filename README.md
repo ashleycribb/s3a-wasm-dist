@@ -11,6 +11,6 @@ Every build passed a Node smoke test (new_session, record_human, record_ai, expo
 from_bytes round-trip, export_delta) before it was published. Each version folder has `BUILD_INFO.txt` with
 its source commit and SHA-256.
 
-CDN: `https://cdn.jsdelivr.net/gh/ashleycribb/s3a-wasm-dist@v0.1.1/v0.1.1/s3a_wasm_snapshot.js`
+CDN: `https://cdn.jsdelivr.net/gh/ashleycribb/s3a-wasm-dist@v0.2.0/v0.2.0/s3a_wasm_snapshot.js`
 
 License: Apache-2.0

@@ -1,4 +1,9 @@
-source: ashleycribb/s3a-storage@2aa2773d562a22b34d5522e9d0052e2da73b80c8
-version: v0.1.44
-sha256(s3a_wasm_snapshot_bg.wasm): ab075dd1c720d7b86c96f5c20ac41bc646591e7e5f46a9f78385a89307c5943e
-built: 2026-10-27T04:02:22Z by wasm-dist run 40447440355
+source: ashleycribb/s3a-storage@2a42c0da65b4a1b5569d6c767707447619cd0c99
+version: v0.2.0
+sha256(package.json): c47bb806a3be12ddbff696d7f96d807ec1d1f504aa27d16e82f48525315afbca
+sha256(s3a_wasm_snapshot.d.ts): 427956634cb38dfb727632a81aa8ef9ef9f781d3377bf2e50c8e9cc71382dbc5
+sha256(s3a_wasm_snapshot.js): ca330575fed8f7e4bc7fe6d6b1681d70515d9751027fec0dc8827a49e7ab58d8
+sha256(s3a_wasm_snapshot_bg.wasm): 39ef22c584c41386113b8bc5296114d3044b161c04cb4785efb635e9a143fee2
+sha256(s3a_wasm_snapshot_bg.wasm.d.ts): c26e610f8c795ee1d31cf602504d458b2ef3c75a097fc48a1b0017aa88b35134
+built: 2026-10-27 wasm-pack 0.13.1 rustc 1.99.1 (C toolchain for ring: zig cc 0.17.0 -target wasm32-freestanding)
+smoke test: SMOKE PASS 18/18 (smoke-test.mjs: consent none/granted/withdrawn, record_human/record_ai, byte-identical export->from_bytes->export round-trip, export_delta, Ed25519-signed committee decisions under all consent states, list, verify right/wrong key, verdict 0 throws, empty study_id throws)
