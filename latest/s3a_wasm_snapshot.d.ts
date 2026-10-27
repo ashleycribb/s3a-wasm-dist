@@ -39,6 +39,16 @@ export class WasmAgentSnapshot {
      */
     assert_agent_allows(agent_slug: string, verb_id?: number | null, tool_bit?: number | null): void;
     /**
+     * True if decision `index` was made by `reviewer_id` on `submission_id` with exactly `comment`.
+     */
+    committee_decision_matches(index: number, reviewer_id: string, submission_id: string, comment: string): boolean;
+    /**
+     * Bytes the reviewer must sign with Ed25519 for the *next* decision.
+     * verdict: 1=Approve, 2=Revise, 3=Reject. `timestamp_sec` must be passed unchanged
+     * to `record_committee_decision`.
+     */
+    committee_signing_payload(verdict: number, reviewer_id: string, submission_id: string, comment: string, timestamp_sec: number): Uint8Array;
+    /**
      * Returns "none" (never asked), "granted", or "withdrawn" (declined or withdrawn).
      */
     consent_state(): string;
@@ -64,6 +74,10 @@ export class WasmAgentSnapshot {
      */
     iri_for_verb_id(id: number): string | undefined;
     /**
+     * Read-only JSON list of committee decisions (hashes, verdict, timestamp, chain status).
+     */
+    list_committee_decisions(): string;
+    /**
      * Creates a new session from a 128-bit hex UUID and seeds the registry with default agents.
      */
     static new_session(session_uuid_hex: string): WasmAgentSnapshot;
@@ -80,6 +94,12 @@ export class WasmAgentSnapshot {
      * Records an AI agent reasoning / tool-call step.
      */
     record_ai(agent_slug: string, step_type: number, confidence: number, human_index?: number | null): number;
+    /**
+     * Verifies and appends a reviewer-signed decision. Returns its index.
+     * Errors (never silent) on bad verdict, empty reviewer/submission, oversize comment,
+     * malformed key/signature, or a signature that does not verify.
+     */
+    record_committee_decision(verdict: number, reviewer_id: string, submission_id: string, comment: string, timestamp_sec: number, reviewer_public_key: Uint8Array, signature: Uint8Array): number;
     /**
      * Records a human activity statement / decision.
      */
@@ -114,6 +134,10 @@ export class WasmAgentSnapshot {
      * Resolves an xAPI IRI or label to its 32-bit integer verb_id.
      */
     verb_id_for_iri(iri: string): number | undefined;
+    /**
+     * Verifies decision `index` against the reviewer public key held by the app.
+     */
+    verify_committee_decision(index: number, reviewer_public_key: Uint8Array): void;
 }
 
 /**
@@ -183,16 +207,20 @@ export interface InitOutput {
     readonly wasmagentsnapshot_add_paper: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly wasmagentsnapshot_apply_delta: (a: number, b: number, c: number) => [number, number, number];
     readonly wasmagentsnapshot_assert_agent_allows: (a: number, b: number, c: number, d: number, e: number) => [number, number];
+    readonly wasmagentsnapshot_committee_decision_matches: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => number;
+    readonly wasmagentsnapshot_committee_signing_payload: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => [number, number, number, number];
     readonly wasmagentsnapshot_consent_state: (a: number) => [number, number];
     readonly wasmagentsnapshot_export_bytes: (a: number) => [number, number, number, number];
     readonly wasmagentsnapshot_export_delta: (a: number) => [number, number, number, number];
     readonly wasmagentsnapshot_export_since: (a: number, b: bigint) => [number, number, number];
     readonly wasmagentsnapshot_from_bytes: (a: number, b: number) => [number, number, number];
     readonly wasmagentsnapshot_iri_for_verb_id: (a: number, b: number) => [number, number];
+    readonly wasmagentsnapshot_list_committee_decisions: (a: number) => [number, number];
     readonly wasmagentsnapshot_new_session: (a: number, b: number) => [number, number, number];
     readonly wasmagentsnapshot_pending_delta_count: (a: number) => number;
     readonly wasmagentsnapshot_preflight: (a: number, b: number, c: number, d: number, e: number) => [number, number];
     readonly wasmagentsnapshot_record_ai: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
+    readonly wasmagentsnapshot_record_committee_decision: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => [number, number, number];
     readonly wasmagentsnapshot_record_human: (a: number, b: number, c: any, d: number, e: number) => [number, number, number];
     readonly wasmagentsnapshot_recording_active: (a: number) => number;
     readonly wasmagentsnapshot_requires_human_gate: (a: number, b: number, c: number) => [number, number, number];
@@ -201,6 +229,7 @@ export interface InitOutput {
     readonly wasmagentsnapshot_search_claims_vector: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
     readonly wasmagentsnapshot_set_consent: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
     readonly wasmagentsnapshot_verb_id_for_iri: (a: number, b: number, c: number) => number;
+    readonly wasmagentsnapshot_verify_committee_decision: (a: number, b: number, c: number, d: number) => [number, number];
     readonly wasmsyncbatch_bytes: (a: number) => [number, number];
     readonly wasmsyncbatch_new_cursor: (a: number) => bigint;
     readonly wasmsyncbatch_record_count: (a: number) => number;
