@@ -1,0 +1,24 @@
+{
+  "name": "s3a-wasm-snapshot",
+  "type": "module",
+  "collaborators": [
+    "S3A Architecture Contributors"
+  ],
+  "description": "Additive In-Memory WebAssembly Snapshot Engine for Scholar Explorer Web Application & AI Agents",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashleycribb/s3a-storage"
+  },
+  "files": [
+    "s3a_wasm_snapshot_bg.wasm",
+    "s3a_wasm_snapshot.js",
+    "s3a_wasm_snapshot.d.ts"
+  ],
+  "main": "s3a_wasm_snapshot.js",
+  "types": "s3a_wasm_snapshot.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
