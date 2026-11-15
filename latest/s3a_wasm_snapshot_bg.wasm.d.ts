@@ -3,12 +3,17 @@
 export const memory: WebAssembly.Memory;
 export const __wbg_wasmagentsnapshot_free: (a: number, b: number) => void;
 export const __wbg_wasmsyncbatch_free: (a: number, b: number) => void;
+export const add_edge: (a: number, b: number, c: number, d: number) => [number, number, number, number];
 export const export_bytes: (a: number) => [number, number, number, number];
 export const export_since: (a: number, b: bigint) => [number, number, number];
 export const from_bytes: (a: number, b: number) => [number, number, number];
+export const get_paper: (a: number, b: number, c: number, d: number) => [number, number, number];
 export const init_panic_hook: () => void;
 export const iri_for_verb_id: (a: number) => [number, number];
+export const list_edges: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
 export const new_session: (a: number, b: number) => [number, number, number];
+export const put_paper: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+export const read_embedded_registry: (a: number, b: number) => [number, number, number];
 export const tool_openalex_query: () => number;
 export const tool_publish: () => number;
 export const verb_id_for_iri: (a: number, b: number) => number;

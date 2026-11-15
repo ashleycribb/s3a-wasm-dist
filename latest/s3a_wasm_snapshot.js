@@ -520,6 +520,27 @@ export class WasmSyncBatch {
 if (Symbol.dispose) WasmSyncBatch.prototype[Symbol.dispose] = WasmSyncBatch.prototype.free;
 
 /**
+ * Appends a research graph edge (given as JSON string conforming to `ScholarGraphEdge`) into an archive byte buffer.
+ * Returns the updated archive bytes.
+ * @param {Uint8Array} archive_bytes
+ * @param {string} edge_json
+ * @returns {Uint8Array}
+ */
+export function add_edge(archive_bytes, edge_json) {
+    const ptr0 = passArray8ToWasm0(archive_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(edge_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ret = wasm.add_edge(ptr0, len0, ptr1, len1);
+    if (ret[3]) {
+        throw takeFromExternrefTable0(ret[2]);
+    }
+    var v3 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
+    wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+    return v3;
+}
+
+/**
  * Standalone function exporting the snapshot as an immutable .snapshot.s3a Uint8Array buffer.
  * @param {WasmAgentSnapshot} snapshot
  * @returns {Uint8Array}
@@ -565,6 +586,25 @@ export function from_bytes(bytes) {
     return WasmAgentSnapshot.__wrap(ret[0]);
 }
 
+/**
+ * Retrieves a paper record matching `paper_key` from an archive byte buffer.
+ * Returns a parsed JavaScript object if found, or null if absent.
+ * @param {Uint8Array} archive_bytes
+ * @param {string} paper_key
+ * @returns {any}
+ */
+export function get_paper(archive_bytes, paper_key) {
+    const ptr0 = passArray8ToWasm0(archive_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(paper_key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ret = wasm.get_paper(ptr0, len0, ptr1, len1);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return takeFromExternrefTable0(ret[0]);
+}
+
 export function init_panic_hook() {
     wasm.init_panic_hook();
 }
@@ -585,6 +625,28 @@ export function iri_for_verb_id(id) {
 }
 
 /**
+ * Queries graph edges connected to `node_key` (with optional `edge_type` filter) from an archive byte buffer.
+ * Returns a JavaScript array of matching edges with retractions resolved.
+ * @param {Uint8Array} archive_bytes
+ * @param {string} node_key
+ * @param {string | null} [edge_type]
+ * @returns {any}
+ */
+export function list_edges(archive_bytes, node_key, edge_type) {
+    const ptr0 = passArray8ToWasm0(archive_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(node_key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    var ptr2 = isLikeNone(edge_type) ? 0 : passStringToWasm0(edge_type, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len2 = WASM_VECTOR_LEN;
+    const ret = wasm.list_edges(ptr0, len0, ptr1, len1, ptr2, len2);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return takeFromExternrefTable0(ret[0]);
+}
+
+/**
  * Standalone factory function to create a new session.
  * @param {string} session_uuid_hex
  * @returns {WasmAgentSnapshot}
@@ -597,6 +659,43 @@ export function new_session(session_uuid_hex) {
         throw takeFromExternrefTable0(ret[1]);
     }
     return WasmAgentSnapshot.__wrap(ret[0]);
+}
+
+/**
+ * Appends a paper record (given as JSON string conforming to `ScholarPaperRecord`) into an archive byte buffer.
+ * Returns the updated archive bytes.
+ * @param {Uint8Array} archive_bytes
+ * @param {string} paper_json
+ * @returns {Uint8Array}
+ */
+export function put_paper(archive_bytes, paper_json) {
+    const ptr0 = passArray8ToWasm0(archive_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(paper_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ret = wasm.put_paper(ptr0, len0, ptr1, len1);
+    if (ret[3]) {
+        throw takeFromExternrefTable0(ret[2]);
+    }
+    var v3 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
+    wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+    return v3;
+}
+
+/**
+ * Decodes the embedded schema registry and spec version directly from archive bytes.
+ * Returns an object with `spec_version` and `types` describing all tile types in the file.
+ * @param {Uint8Array} archive_bytes
+ * @returns {any}
+ */
+export function read_embedded_registry(archive_bytes) {
+    const ptr0 = passArray8ToWasm0(archive_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.read_embedded_registry(ptr0, len0);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return takeFromExternrefTable0(ret[0]);
 }
 
 /**
@@ -721,6 +820,10 @@ function __wbg_get_imports() {
             const ret = Date.now();
             return ret;
         },
+        __wbg_parse_0fc53dead14b3b42: function() { return handleError(function (arg0, arg1) {
+            const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
+            return ret;
+        }, arguments); },
         __wbg_process_44c7a14e11e9f69e: function(arg0) {
             const ret = arg0.process;
             return ret;

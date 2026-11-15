@@ -153,6 +153,12 @@ export class WasmSyncBatch {
 }
 
 /**
+ * Appends a research graph edge (given as JSON string conforming to `ScholarGraphEdge`) into an archive byte buffer.
+ * Returns the updated archive bytes.
+ */
+export function add_edge(archive_bytes: Uint8Array, edge_json: string): Uint8Array;
+
+/**
  * Standalone function exporting the snapshot as an immutable .snapshot.s3a Uint8Array buffer.
  */
 export function export_bytes(snapshot: WasmAgentSnapshot): Uint8Array;
@@ -167,6 +173,12 @@ export function export_since(snapshot: WasmAgentSnapshot, cursor: bigint): WasmS
  */
 export function from_bytes(bytes: Uint8Array): WasmAgentSnapshot;
 
+/**
+ * Retrieves a paper record matching `paper_key` from an archive byte buffer.
+ * Returns a parsed JavaScript object if found, or null if absent.
+ */
+export function get_paper(archive_bytes: Uint8Array, paper_key: string): any;
+
 export function init_panic_hook(): void;
 
 /**
@@ -175,9 +187,27 @@ export function init_panic_hook(): void;
 export function iri_for_verb_id(id: number): string | undefined;
 
 /**
+ * Queries graph edges connected to `node_key` (with optional `edge_type` filter) from an archive byte buffer.
+ * Returns a JavaScript array of matching edges with retractions resolved.
+ */
+export function list_edges(archive_bytes: Uint8Array, node_key: string, edge_type?: string | null): any;
+
+/**
  * Standalone factory function to create a new session.
  */
 export function new_session(session_uuid_hex: string): WasmAgentSnapshot;
+
+/**
+ * Appends a paper record (given as JSON string conforming to `ScholarPaperRecord`) into an archive byte buffer.
+ * Returns the updated archive bytes.
+ */
+export function put_paper(archive_bytes: Uint8Array, paper_json: string): Uint8Array;
+
+/**
+ * Decodes the embedded schema registry and spec version directly from archive bytes.
+ * Returns an object with `spec_version` and `types` describing all tile types in the file.
+ */
+export function read_embedded_registry(archive_bytes: Uint8Array): any;
 
 export function tool_openalex_query(): number;
 
@@ -194,12 +224,17 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_wasmagentsnapshot_free: (a: number, b: number) => void;
     readonly __wbg_wasmsyncbatch_free: (a: number, b: number) => void;
+    readonly add_edge: (a: number, b: number, c: number, d: number) => [number, number, number, number];
     readonly export_bytes: (a: number) => [number, number, number, number];
     readonly export_since: (a: number, b: bigint) => [number, number, number];
     readonly from_bytes: (a: number, b: number) => [number, number, number];
+    readonly get_paper: (a: number, b: number, c: number, d: number) => [number, number, number];
     readonly init_panic_hook: () => void;
     readonly iri_for_verb_id: (a: number) => [number, number];
+    readonly list_edges: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
     readonly new_session: (a: number, b: number) => [number, number, number];
+    readonly put_paper: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+    readonly read_embedded_registry: (a: number, b: number) => [number, number, number];
     readonly tool_openalex_query: () => number;
     readonly tool_publish: () => number;
     readonly verb_id_for_iri: (a: number, b: number) => number;
