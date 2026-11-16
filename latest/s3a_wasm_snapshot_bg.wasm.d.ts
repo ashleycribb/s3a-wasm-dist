@@ -17,6 +17,7 @@ export const read_embedded_registry: (a: number, b: number) => [number, number, 
 export const tool_openalex_query: () => number;
 export const tool_publish: () => number;
 export const verb_id_for_iri: (a: number, b: number) => number;
+export const verify_rfc3161_token: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
 export const wasmagentsnapshot_add_claim: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => [number, number, number];
 export const wasmagentsnapshot_add_paper: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
 export const wasmagentsnapshot_apply_delta: (a: number, b: number, c: number) => [number, number, number];

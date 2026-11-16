@@ -218,6 +218,14 @@ export function tool_publish(): number;
  */
 export function verb_id_for_iri(iri: string): number | undefined;
 
+/**
+ * Verifies an RFC 3161 timestamp token (TimeStampResp or TimeStampToken DER) over a SHA-256
+ * fingerprint (64 hex chars) against PEM trust roots. RSA (PKCS#1 v1.5, PSS) and P-256 TSAs
+ * are supported. Returns `true` only for a fully verified token; a fingerprint that differs
+ * from the token's message imprint returns `false`; any verification failure throws.
+ */
+export function verify_rfc3161_token(proof_bytes: Uint8Array, fingerprint_hex: string, trust_roots_pem: string): boolean;
+
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
@@ -238,6 +246,7 @@ export interface InitOutput {
     readonly tool_openalex_query: () => number;
     readonly tool_publish: () => number;
     readonly verb_id_for_iri: (a: number, b: number) => number;
+    readonly verify_rfc3161_token: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
     readonly wasmagentsnapshot_add_claim: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => [number, number, number];
     readonly wasmagentsnapshot_add_paper: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly wasmagentsnapshot_apply_delta: (a: number, b: number, c: number) => [number, number, number];

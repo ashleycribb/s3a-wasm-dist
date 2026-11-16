@@ -725,6 +725,30 @@ export function verb_id_for_iri(iri) {
     const ret = wasm.verb_id_for_iri(ptr0, len0);
     return ret === Number.MAX_SAFE_INTEGER ? undefined : ret;
 }
+
+/**
+ * Verifies an RFC 3161 timestamp token (TimeStampResp or TimeStampToken DER) over a SHA-256
+ * fingerprint (64 hex chars) against PEM trust roots. RSA (PKCS#1 v1.5, PSS) and P-256 TSAs
+ * are supported. Returns `true` only for a fully verified token; a fingerprint that differs
+ * from the token's message imprint returns `false`; any verification failure throws.
+ * @param {Uint8Array} proof_bytes
+ * @param {string} fingerprint_hex
+ * @param {string} trust_roots_pem
+ * @returns {boolean}
+ */
+export function verify_rfc3161_token(proof_bytes, fingerprint_hex, trust_roots_pem) {
+    const ptr0 = passArray8ToWasm0(proof_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(fingerprint_hex, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(trust_roots_pem, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ret = wasm.verify_rfc3161_token(ptr0, len0, ptr1, len1, ptr2, len2);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return ret[0] !== 0;
+}
 function __wbg_get_imports() {
     const import0 = {
         __proto__: null,
