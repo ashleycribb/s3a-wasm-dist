@@ -1,4 +1,4 @@
-source: ashleycribb/s3a-storage@296b8e63445ada73da564484139a3c00a435dd13
-version: v0.2.2
-sha256(s3a_wasm_snapshot_bg.wasm): e070a2342a05bca0e66fa8d068b2e4f248bf5d46bfee0febccc7ec85787bd65a
-built: 2026-11-16T00:55:52Z by wasm-dist run 43783148023
+source: ashleycribb/s3a-storage@2cf2b45fb1a3375735687252d93a612fb6c9f773
+version: v0.2.3
+sha256(s3a_wasm_snapshot_bg.wasm): bcbb695a7948c598cc579f98861fc2de26b8e69b25161dad89930ffd2427ed62
+built: 2026-11-17T15:55:10Z by wasm-dist run 44119564407
